@@ -89,6 +89,35 @@ def LIST(*L):
 ## query classes
 
 
+class Display:
+
+    def __init__(self, display, given=TRUE, limit=None):
+        self.display = display
+        self.given = given
+        self.limit = limit
+        self.__doc__ = display.__doc__
+        if given is not TRUE:
+            self.__doc__ += " " + given.__doc__
+        if limit is not None:
+            self.__doc__ += " limit {0}".format(limit)
+        self.results = []
+    
+    def process(self, t):
+        if self.given(t):
+            self.results.append(t)
+    
+    def result(self):
+        print()
+        print("=========================================")
+        print(self.__doc__)
+        print("=========================================")
+        for t in self.results[:self.limit]:
+            print(self.display(t))
+        print("=========================================")
+        print("{0} items".format(len(self.results)))
+        print("=========================================")
+
+
 class PartCount:
     
     def __init__(self, prop, given=TRUE):

@@ -4,8 +4,11 @@
 from domain import *
 
 
-greek_forms = parse_cols("forms.txt", ("form", "pos", "parse", "lemma"))
-process(greek_forms, [
+greek_forms = Rel()
+greek_forms.load_cols("forms.txt", ("form", "pos", "parse", "lemma"))
+
+
+greek_forms.query(
     PartCount(TENSE),
     PartCount(TENSE, given=INFINITIVE),
     PartCount(LIST(TENSE, VOICE), given=INFINITIVE),
@@ -15,4 +18,4 @@ process(greek_forms, [
     CrossTab(CASE_IS("N"), ENDS_IN("ος"), given=NOMINAL),
     Assert(ENDS_IN("ν"), given=TVM_IS("PAN"), display=LEMMA),
     Assert(ENDS_IN("ν"), given=TVM_IS("PAN"), display=LAST_3, uniq=True),
-])
+)

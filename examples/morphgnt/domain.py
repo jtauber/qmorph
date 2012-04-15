@@ -10,89 +10,75 @@ def strip_accents(s):
 ## PROPERTIES
 
 
-def POS(t):
-    "pos"
-    return t.pos
-
-
-def PARSE(t):
-    "parse"
-    return t.parse
-
-
-def FORM(t):
-    "form"
-    return t.form
-
-
-def LEMMA(t):
-    "lemma"
-    return t.lemma
+POS = FIELD("pos")
+PARSE = FIELD("parse")
+FORM = FIELD("form")
+LEMMA = FIELD("lemma")
 
 
 def LAST_2(t):
     "ending"
-    return strip_accents(t.form)[-2:]
+    return strip_accents(t["form"])[-2:]
 
 
 def LAST_3(t):
     "ending"
-    return strip_accents(t.form)[-3:]
+    return strip_accents(t["form"])[-3:]
 
 
 def CNG(t):
     "case/number/gender"
-    return t.parse[4:7]
+    return t["parse"][4:7]
 
 
 def TVM(t):
     "tense/voice/mood"
-    return t.parse[1:4]
+    return t["parse"][1:4]
 
 
 def TENSE(t):
     "tense"
-    return t.parse[1]
+    return t["parse"][1]
 
 
 def VOICE(t):
     "voice"
-    return t.parse[2]
+    return t["parse"][2]
 
 
 def MOOD(t):
     "mood"
-    return t.parse[3]
+    return t["parse"][3]
 
 
 def DEGREE(t):
     "degree"
-    return t.parse[7]
+    return t["parse"][7]
 
 
 def CASE(t):
     "case"
-    return t.parse[4]
+    return t["parse"][4]
 
 
 def CASE_NUM(t):
     "case/number"
-    return t.parse[4:6]
+    return t["parse"][4:6]
 
 
 def NUMBER(t):
     "number"
-    return t.parse[5]
+    return t["parse"][5]
 
 
 def PERSON(t):
     "person"
-    return t.parse[0]
+    return t["parse"][0]
 
 
 def TAGS(t):
     "tags"
-    return " ".join(t.tags)
+    return " ".join(t["tags"])
 
 
 ## CHARACTERISTICS
@@ -103,7 +89,7 @@ def TAGS(t):
 
 def NOMINAL(t):
     "nominal"
-    return t.pos[0] in ["N", "A", "R"] or (t.pos == "V-" and t.parse[3] == "P")
+    return t["pos"][0] in ["N", "A", "R"] or (t["pos"] == "V-" and t["parse"][3] == "P")
 
 
 def INFINITIVE(t):
@@ -117,7 +103,7 @@ def INFINITIVE(t):
 
 def ENDS_IN(ending):
     def _(t):
-        return strip_accents(t.form).endswith(ending)
+        return strip_accents(t["form"]).endswith(ending)
     _.__doc__ = "-{0}".format(ending)
     return _
 
@@ -202,7 +188,7 @@ def PERSON_NUMBER_IS(person_number):
 def STEM_SUFFIX(stem_name, ending):
     def _(t):
         if hasattr(t, stem_name):
-            return strip_accents(t.form) == strip_accents(getattr(t, stem_name) + u(ending))
+            return strip_accents(t["form"]) == strip_accents(getattr(t, stem_name) + u(ending))
         else:
             return False
     _.__doc__ = "{0}+{1}".format(stem_name, ending)
@@ -221,7 +207,7 @@ class EndingTree:
     
     def process(self, t):
         if self.given(t):
-            a, p, u = ("###" + strip_accents(t.form))[-3:]
+            a, p, u = ("###" + strip_accents(t["form"]))[-3:]
             self.root[u][p][a] += 1
     
     def result(self):

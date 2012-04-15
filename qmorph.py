@@ -1,17 +1,12 @@
 from collections import defaultdict
 
 
-class T:
-    def __init__(self, data_dict):
-        self.__dict__.update(data_dict)
-
-
 class Rel:
     def __init__(self):
         self.tuples = []
     
     def add(self, data_dict):
-        self.tuples.append(T(data_dict))
+        self.tuples.append(data_dict)
     
     def load_cols(self, filename, field_tuple):
         for line in open(filename):
@@ -48,7 +43,7 @@ def TRUE(t):
 
 def FIELD(N):
     def _(t):
-        return getattr(t, N)
+        return t.get(N)
     _.__doc__ = N
     return _
 
@@ -104,7 +99,7 @@ def NEVER():
 
 def LIST(*L):
     def _(t):
-        return " ".join([i(t) for i in L])
+        return " ".join([(i(t) if i(t) is not None else "-") for i in L])
     _.__doc__ = ", ".join([i.__doc__ for i in L])
     return _
 

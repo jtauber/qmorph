@@ -14,20 +14,20 @@ from qmorph import *
 greek_forms = Rel()
 greek_forms.load_cols("forms.txt", ("form", "pos", "parse", "lemma"))
 
-greek_forms.query(PartCount(lambda t: t.pos))
+greek_forms.query(PartCount(lambda t: t["pos"]))
 ```
 
 `Rel` initializes the relation.
 
 `load_cols` parses a given line-per-record, whitespace-delimited file into
-objects with the given fields.
+dictionaries with the given fields.
 
-`query` then runs the given query or list of queries on those objects.
+`query` then runs the given query or list of queries on those dictionaries.
 
 `PartCount` is a provided **query class** that partitions and counts the
-objects based on the given **property function**. Above the property function
-is provided inline but the equivalent could be achieved using the higher-order
-``FIELD`` function provided:
+dictionaries based on the given **property function**. Above the property
+function is provided inline but the equivalent could be achieved using the
+higher-order ``FIELD`` function provided:
 
 ```
 from qmorph import *
@@ -170,21 +170,21 @@ As mentioned at the start, you can write your own *property functions*:
 ```
 def TENSE(t):
     "tense"
-    return t.parse[1]
+    return t["parse"][1]
 ```
 
 which can be combined with `LIST` as we saw above in things like
 `LIST(TENSE, VOICE)`.
 
-Notice that *property functions* take an object `t` and return some string
-value from that object.
+Notice that *property functions* take an dictionary `t` and return some string
+value from that dictionary.
 
 You can also write your own *characteristic functions*:
 
 ```
 def NOMINAL(t):
     "nominal"
-    return t.pos[0] in ["N", "A", "R"] or (t.pos == "V-" and t.parse[3] == "P")
+    return t["pos"][0] in ["N", "A", "R"] or (t["pos"] == "V-" and t["parse"][3] == "P")
 ```
 
 and *higher-order characteristic functions* (functions which return
@@ -193,7 +193,7 @@ and *higher-order characteristic functions* (functions which return
 ```
 def ENDS_IN(ending):
     def _(t):
-        return strip_accents(t.form).endswith(ending)
+        return strip_accents(t["form"]).endswith(ending)
     _.__doc__ = "-{0}".format(ending)
     return _
 ```
@@ -202,8 +202,8 @@ def ENDS_IN(ending):
 `ALL`. There are also built-in *characteristic functions* `ALWAYS` and
 `NEVER`.
 
-Notice that *characteristic functions* take an object `t` and return a boolean
-indicating whether the object has that characteristic.
+Notice that *characteristic functions* take an dictionary `t` and return a
+boolean indicating whether the dictionary has that characteristic.
 
 Note that the doc-strings are very important as they are used as part of the
 output of query results.

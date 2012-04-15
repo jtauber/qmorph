@@ -9,11 +9,11 @@ Django ORM's query syntax.
 ## Example
 
 ```
-from domain import *
+from qmorph import *
 
-greek_forms = parse("forms.txt", ("form", "pos", "parse", "lemma"))
+greek_forms = parse_cols("forms.txt", ("form", "pos", "parse", "lemma"))
 process(greek_forms, [
-    PartCount(TENSE),
+    PartCount(lambda t: t.pos),
 ]
 ```
 
@@ -23,7 +23,20 @@ an object with the given fields.
 `process` then runs the given list of queries on those objects.
 
 `PartCount` is a provided **query class** that partitions and counts the
-objects based on the domain-specific **property function** ``TENSE`` resulting
+objects based on the given **property function**. 
+
+
+
+```
+from domain import *
+
+greek_forms = parse_cols("forms.txt", ("form", "pos", "parse", "lemma"))
+process(greek_forms, [
+    PartCount(TENSE),
+]
+```
+
+ domain-specific **property function** ``TENSE`` resulting
 in output like:
 
 ```

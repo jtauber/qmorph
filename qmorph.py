@@ -29,7 +29,7 @@ class Rel:
             self.add(dict(zip(field_tuple, line.strip().split())), index, join)
     
     def load_dict(self, filename, index=None, join=None):
-        for line in open("lexeme_pan.txt"):
+        for line in open(filename):
             self.add(dict(p.split(":") for p in line.strip().split()), index, join)
             
     

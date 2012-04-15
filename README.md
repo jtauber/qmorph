@@ -17,15 +17,30 @@ process(greek_forms, [
 ]
 ```
 
-`parse` parses a given line-per-record, whitespace-delimited file into
+`parse_cols` parses a given line-per-record, whitespace-delimited file into
 an object with the given fields.
 
 `process` then runs the given list of queries on those objects.
 
 `PartCount` is a provided **query class** that partitions and counts the
-objects based on the given **property function**. 
+objects based on the given **property function**. Above the property function
+is provided inline but the equivalent could be achieved using the higher-order
+``FIELD`` function provided:
 
+```
+from qmorph import *
 
+greek_forms = parse_cols("forms.txt", ("form", "pos", "parse", "lemma"))
+process(greek_forms, [
+    PartCount(FIELD("pos")),
+]
+```
+
+which is equivalent to our first example.
+
+Often you end up writing your own property functions. For example, we could
+write ``TENSE``, a function to extract the tense from the ``parse`` field and
+then do:
 
 ```
 from domain import *
@@ -36,8 +51,7 @@ process(greek_forms, [
 ]
 ```
 
- domain-specific **property function** ``TENSE`` resulting
-in output like:
+resulting in output like:
 
 ```
 =========================================
@@ -151,7 +165,7 @@ a given type of word (identified by *characteristic function*) can have.
 EndingTree(given=INFINITIVE),
 ```
 
-You can write your own *property functions*:
+As mentioned at the start, you can write your own *property functions*:
 
 ```
 def TENSE(t):

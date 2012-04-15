@@ -6,23 +6,28 @@ class T:
         self.__dict__.update(data_dict)
 
 
-def parse_cols(filename, field_tuple):
-    for line in open(filename):
-        yield T(dict(zip(field_tuple, line.strip().split())))
-
-
-def parse_dict(filename):
-    for line in open("lexeme_pan.txt"):
-        yield T(dict(p.split(":") for p in line.strip().split()))
-
-
-def process(source, queries):
-    for item in source:
-        for query in queries:
-            query.process(item)
+class Rel:
+    def __init__(self):
+        self.tuples = []
     
-    for query in queries:
-        query.result()
+    def add(self, data_dict):
+        self.tuples.append(T(data_dict))
+    
+    def load_cols(self, filename, field_tuple):
+        for line in open(filename):
+            self.add(dict(zip(field_tuple, line.strip().split())))
+    
+    def load_dict(self, filename):
+        for line in open("lexeme_pan.txt"):
+            self.add(dict(p.split(":") for p in line.strip().split()))
+    
+    def query(self, *queries):
+        for item in self.tuples:
+            for query in queries:
+                query.process(item)
+        
+        for query in queries:
+            query.result()
 
 
 ## characteristics

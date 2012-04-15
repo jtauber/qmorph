@@ -11,16 +11,18 @@ Django ORM's query syntax.
 ```
 from qmorph import *
 
-greek_forms = parse_cols("forms.txt", ("form", "pos", "parse", "lemma"))
-process(greek_forms, [
-    PartCount(lambda t: t.pos),
-]
+greek_forms = Rel()
+greek_forms.load_cols("forms.txt", ("form", "pos", "parse", "lemma"))
+
+greek_forms.query(PartCount(lambda t: t.pos))
 ```
 
-`parse_cols` parses a given line-per-record, whitespace-delimited file into
-an object with the given fields.
+`Rel` initializes the relation.
 
-`process` then runs the given list of queries on those objects.
+`load_cols` parses a given line-per-record, whitespace-delimited file into
+objects with the given fields.
+
+`query` then runs the given query or list of queries on those objects.
 
 `PartCount` is a provided **query class** that partitions and counts the
 objects based on the given **property function**. Above the property function
@@ -30,10 +32,9 @@ is provided inline but the equivalent could be achieved using the higher-order
 ```
 from qmorph import *
 
-greek_forms = parse_cols("forms.txt", ("form", "pos", "parse", "lemma"))
-process(greek_forms, [
-    PartCount(FIELD("pos")),
-]
+greek_forms = Rel()
+greek_forms.load_cols("forms.txt", ("form", "pos", "parse", "lemma"))
+greek_forms.query(PartCount(FIELD("pos")))
 ```
 
 which is equivalent to our first example.
@@ -45,10 +46,9 @@ then do:
 ```
 from domain import *
 
-greek_forms = parse_cols("forms.txt", ("form", "pos", "parse", "lemma"))
-process(greek_forms, [
-    PartCount(TENSE),
-]
+greek_forms = Rel()
+greek_forms.load_cols("forms.txt", ("form", "pos", "parse", "lemma"))
+greek_forms.query(PartCount(TENSE))
 ```
 
 resulting in output like:

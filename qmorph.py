@@ -12,6 +12,11 @@ def parse(filename, field_tuple):
         yield T(dict(zip(field_tuple, s)))
 
 
+def parse_dict(filename):
+    for line in open("lexeme_pan.txt"):
+        yield T(dict(p.split(":") for p in line.strip().split()))
+
+
 def process(source, queries):
     for item in source:
         for query in queries:

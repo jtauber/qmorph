@@ -4,7 +4,7 @@
 from domain import *
 
 
-greek_forms = parse("forms.txt", ("form", "pos", "parse", "lemma"))
+greek_forms = parse_cols("forms.txt", ("form", "pos", "parse", "lemma"))
 process(greek_forms, [
     PartCount(TENSE),
     PartCount(TENSE, given=INFINITIVE),

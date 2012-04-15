@@ -6,10 +6,9 @@ class T:
         self.__dict__.update(data_dict)
 
 
-def parse(filename, field_tuple):
+def parse_cols(filename, field_tuple):
     for line in open(filename):
-        s = line.strip().split()
-        yield T(dict(zip(field_tuple, s)))
+        yield T(dict(zip(field_tuple, line.strip().split())))
 
 
 def parse_dict(filename):

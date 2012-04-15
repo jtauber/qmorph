@@ -47,11 +47,13 @@ def FIELD(N):
     _.__doc__ = N
     return _
 
+
 def AND(A, B):
    def _(t):
        return A(t) and B(t)
    _.__doc__ = "and({0},{1})".format(A.__doc__, B.__doc__)
    return _
+
 
 def OR(A, B):
     def _(t):
@@ -59,11 +61,13 @@ def OR(A, B):
     _.__doc__ = "or({0},{1})".format(A.__doc__, B.__doc__)
     return _
 
+
 def ANY(*L):
     def _(t):
         return any([i(t) for i in L])
     _.__doc__ = "any({0})".format(", ".join([i.__doc__ for i in L]))
     return _
+
 
 def ALL(*L):
     def _(t):
@@ -71,11 +75,13 @@ def ALL(*L):
     _.__doc__ = "all({0})".format(", ".join([i.__doc__ for i in L]))
     return _
 
+
 def NOT(A):
     def _(t):
         return not A(t)
     _.__doc__ = "not({0})".format(A.__doc__)
     return _
+
 
 def ALWAYS():
     def _(t):
@@ -83,11 +89,13 @@ def ALWAYS():
     _.__doc__ = "always"
     return _
 
+
 def NEVER():
     def _(t):
         return False
     _.__doc__ = "always"
     return _
+
 
 def LIST(*L):
     def _(t):

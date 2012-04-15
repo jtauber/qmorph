@@ -4,17 +4,34 @@ from collections import defaultdict
 class Rel:
     def __init__(self):
         self.tuples = []
+        # indexes only exist for load-time joins at the moment, not queries
+        self.indexes = defaultdict(dict)
     
-    def add(self, data_dict):
+    def add(self, data_dict, index=None, join=None):
+        # before we add the given dictionary, let's join in any extra values
+        if join is not None:
+            for that_rel, key_mapping, mappings in join:
+                other_tuple = that_rel.indexes[key_mapping[1]].get(data_dict[key_mapping[0]])
+                if other_tuple is not None:
+                    data_dict.update({here: other_tuple[there] for there, here in mappings})
+        
         self.tuples.append(data_dict)
+        
+        # now index if requested
+        if index is not None:
+            for i in index:
+                # unique indexes at the moment as they are for joins only
+                self.indexes[i][data_dict[i]] = data_dict
+                
     
-    def load_cols(self, filename, field_tuple):
+    def load_cols(self, filename, field_tuple, index=None, join=None):
         for line in open(filename):
-            self.add(dict(zip(field_tuple, line.strip().split())))
+            self.add(dict(zip(field_tuple, line.strip().split())), index, join)
     
-    def load_dict(self, filename):
+    def load_dict(self, filename, index=None, join=None):
         for line in open("lexeme_pan.txt"):
-            self.add(dict(p.split(":") for p in line.strip().split()))
+            self.add(dict(p.split(":") for p in line.strip().split()), index, join)
+            
     
     def query(self, *queries):
         for item in self.tuples:

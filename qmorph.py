@@ -42,6 +42,12 @@ def TRUE(t):
 ## higher-order characteristics
 
 
+def FIELD(N):
+    def _(t):
+        return getattr(t, N)
+    _.__doc__ = N
+    return _
+
 def AND(A, B):
    def _(t):
        return A(t) and B(t)

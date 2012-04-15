@@ -2,14 +2,14 @@ from collections import defaultdict
 
 
 class T:
-    def __init__(self, label, data):
-        self.__dict__.update(dict(zip(label, data)))
+    def __init__(self, data_dict):
+        self.__dict__.update(data_dict)
 
 
 def parse(filename, field_tuple):
     for line in open(filename):
         s = line.strip().split()
-        yield T(field_tuple, s)
+        yield T(dict(zip(field_tuple, s)))
 
 
 def process(source, queries):

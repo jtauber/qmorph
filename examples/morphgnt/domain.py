@@ -76,6 +76,11 @@ def PERSON(t):
     return t["parse"][0]
 
 
+def PERSON_NUM(t):
+    "person/num"
+    return t["parse"][0] + t["parse"][5]
+
+
 def TAGS(t):
     "tags"
     return " ".join(t["tags"])

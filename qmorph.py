@@ -22,7 +22,6 @@ class Rel:
             for i in index:
                 # unique indexes at the moment as they are for joins only
                 self.indexes[i][data_dict[i]] = data_dict
-                
     
     def load_cols(self, filename, field_tuple, index=None, join=None):
         for line in open(filename):
@@ -31,7 +30,6 @@ class Rel:
     def load_dict(self, filename, index=None, join=None):
         for line in open(filename):
             self.add(dict(p.split(":") for p in line.strip().split()), index, join)
-            
     
     def query(self, *queries):
         for item in self.tuples:
@@ -66,10 +64,10 @@ def FIELD(N):
 
 
 def AND(A, B):
-   def _(t):
-       return A(t) and B(t)
-   _.__doc__ = "and({0},{1})".format(A.__doc__, B.__doc__)
-   return _
+    def _(t):
+        return A(t) and B(t)
+    _.__doc__ = "and({0},{1})".format(A.__doc__, B.__doc__)
+    return _
 
 
 def OR(A, B):

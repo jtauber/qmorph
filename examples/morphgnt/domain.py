@@ -4,7 +4,7 @@ from qmorph import *
 
 
 def strip_accents(s):
-   return ''.join((c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn'))
+    return ''.join((c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn'))
 
 
 ## PROPERTIES
@@ -88,7 +88,7 @@ def TAGS(t):
 
 ## CHARACTERISTICS
 
-# a "characteristic" is a function that takes a "tuple" and returns a boolean 
+# a "characteristic" is a function that takes a "tuple" and returns a boolean
 # as to whether that tuple has a particular characteristic.
 
 

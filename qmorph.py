@@ -207,16 +207,29 @@ class CrossTab:
                     self.count4 += 1
     
     def result(self):
+        a = self.count1
+        b = self.count2
+        c = self.count3
+        d = self.count4
+        a_b = a + b
+        c_d = c + d
+        a_c = a + c
+        b_d = b + d
+        n = a + b + c + d
+        chi_squared = (n * (a * d - b * c) ** 2) / (a_b * c_d * a_c * b_d)
+        
         print()
         print("=========================================")
         print(self.__doc__)
         print("=========================================")
         print(" {0:>20} {1:>8}".format(self.char2.__doc__, "not"))
         print("-----------------------------------------")
-        print("{0:<10} | {1:>8} {2:>8} | {3:>8}".format(self.char1.__doc__, self.count1, self.count2, self.count1 + self.count2))
-        print("not        | {0:>8} {1:>8} | {2:>8}".format(self.count3, self.count4, self.count3 + self.count4))
+        print("{0:<10} | {1:>8} {2:>8} | {3:>8}".format(self.char1.__doc__, a, b, a_b))
+        print("not        | {0:>8} {1:>8} | {2:>8}".format(c, d, c_d))
         print("-----------------------------------------")
-        print("           | {0:>8} {1:>8} | {2:>8}".format(self.count1 + self.count3, self.count2 + self.count4, self.count1 + self.count2 + self.count3 + self.count4))
+        print("           | {0:>8} {1:>8} | {2:>8}".format(a_c, b_d, n))
+        print("=========================================")
+        print("χ² = {}".format(chi_squared))
         print("=========================================")
 
 

@@ -176,6 +176,13 @@ def VOICE_IS(voice):
     return _
 
 
+def TENSE_IS(tense):
+    def _(t):
+        return TENSE(t) == str(tense)
+    _.__doc__ = "tense {0}".format(tense)
+    return _
+
+
 def DEGREE_IS(degree):
     def _(t):
         return DEGREE(t) == str(degree)

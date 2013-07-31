@@ -202,7 +202,7 @@ def ENDS_IN(ending):
 `ALL`. There are also built-in *characteristic functions* `ALWAYS` and
 `NEVER`.
 
-Notice that *characteristic functions* take an dictionary `t` and return a
+Notice that *characteristic functions* take a dictionary `t` and return a
 boolean indicating whether the dictionary has that characteristic.
 
 Note that the doc-strings are very important as they are used as part of the

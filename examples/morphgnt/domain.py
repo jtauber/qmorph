@@ -211,17 +211,17 @@ def STEM_SUFFIX(stem_name, ending):
 
 
 class EndingTree:
-    
+
     def __init__(self, given=TRUE, limit=3):
         self.given = given
         self.limit = limit
         self.root = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
-    
+
     def process(self, t):
         if self.given(t):
             a, p, u = ("###" + strip_accents(t["form"]))[-3:]
             self.root[u][p][a] += 1
-    
+
     def result(self):
         print()
         print("=========================================")

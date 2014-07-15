@@ -6,7 +6,7 @@ class Rel:
         self.tuples = []
         # indexes only exist for load-time joins at the moment, not queries
         self.indexes = defaultdict(dict)
-    
+
     def add(self, data_dict, index=None, join=None):
         # before we add the given dictionary, let's join in any extra values
         if join is not None:
@@ -14,28 +14,28 @@ class Rel:
                 other_tuple = that_rel.indexes[key_mapping[1]].get(data_dict[key_mapping[0]])
                 if other_tuple is not None:
                     data_dict.update({here: other_tuple[there] for there, here in mappings})
-        
+
         self.tuples.append(data_dict)
-        
+
         # now index if requested
         if index is not None:
             for i in index:
                 # unique indexes at the moment as they are for joins only
                 self.indexes[i][data_dict[i]] = data_dict
-    
+
     def load_cols(self, filename, field_tuple, index=None, join=None):
         for line in open(filename):
             self.add(dict(zip(field_tuple, line.strip().split())), index, join)
-    
+
     def load_dict(self, filename, index=None, join=None):
         for line in open(filename):
             self.add(dict(p.split(":") for p in line.strip().split()), index, join)
-    
+
     def query(self, *queries):
         for item in self.tuples:
             for query in queries:
                 query.process(item)
-        
+
         for query in queries:
             query.result()
 
@@ -134,11 +134,11 @@ class Display:
         if limit is not None:
             self.__doc__ += " limit {0}".format(limit)
         self.results = []
-    
+
     def process(self, t):
         if self.given(t):
             self.results.append(t)
-    
+
     def result(self):
         print()
         print("=========================================")
@@ -152,7 +152,7 @@ class Display:
 
 
 class PartCount:
-    
+
     def __init__(self, prop, given=TRUE):
         self.prop = prop
         self.given = given
@@ -161,11 +161,11 @@ class PartCount:
             self.__doc__ = "{0}".format(prop.__doc__,)
         else:
             self.__doc__ = "{0} given {1}".format(prop.__doc__, given.__doc__)
-    
+
     def process(self, t):
         if self.given(t):
             self.alt[self.prop(t)] += 1
-    
+
     def result(self):
         print()
         print("=========================================")
@@ -179,7 +179,7 @@ class PartCount:
 
 
 class CrossTab:
-    
+
     def __init__(self, char1, char2, given=TRUE):
         self.char1 = char1
         self.char2 = char2
@@ -192,7 +192,7 @@ class CrossTab:
             self.__doc__ = "{0} vs {1}".format(char1.__doc__, char2.__doc__)
         else:
             self.__doc__ = "{0} vs {1} given {2}".format(char1.__doc__, char2.__doc__, given.__doc__)
-    
+
     def process(self, t):
         if self.given(t):
             if self.char1(t):
@@ -205,7 +205,7 @@ class CrossTab:
                     self.count3 += 1
                 else:
                     self.count4 += 1
-    
+
     def result(self):
         a = self.count1
         b = self.count2
@@ -217,7 +217,7 @@ class CrossTab:
         b_d = b + d
         n = a + b + c + d
         chi_squared = (n * (a * d - b * c) ** 2) / (a_b * c_d * a_c * b_d)
-        
+
         print()
         print("=========================================")
         print(self.__doc__)
@@ -234,7 +234,7 @@ class CrossTab:
 
 
 class Assert:
-    
+
     def __init__(self, assertion, display=str, given=TRUE, uniq=False):
         self.assertion = assertion
         self.display = display
@@ -245,11 +245,11 @@ class Assert:
             self.__doc__ = assertion.__doc__
         else:
             self.__doc__ = "{0} given {1}".format(assertion.__doc__, given.__doc__)
-    
+
     def process(self, t):
         if self.given(t) and not self.assertion(t):
             self.violations.append(t)
-    
+
     def result(self):
         print()
         print("=========================================")

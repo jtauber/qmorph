@@ -200,7 +200,7 @@ def PERSON_NUMBER_IS(person_number):
 def STEM_SUFFIX(stem_name, ending):
     def _(t):
         if hasattr(t, stem_name):
-            return strip_accents(t["form"]) == strip_accents(getattr(t, stem_name) + u(ending))
+            return strip_accents(t["form"]) == strip_accents(getattr(t, stem_name) + ending)
         else:
             return False
     _.__doc__ = "{0}+{1}".format(stem_name, ending)
